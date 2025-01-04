@@ -1,10 +1,18 @@
 import { createRoot } from 'react-dom/client'
 
 export class ReactElement extends HTMLElement {
+  private mutationObserver: MutationObserver
+
   constructor(
     private createElement: (props: Record<string, unknown>) => JSX.Element,
   ) {
     super()
+    // Re-render the component if the element's attributes change
+    this.mutationObserver = new MutationObserver(() => {
+      this.unmount()
+      this.render()
+    })
+    this.mutationObserver.observe(this, { attributes: true })
   }
 
   // Native HTMLElement lifecycle method which runs on init
@@ -15,6 +23,7 @@ export class ReactElement extends HTMLElement {
   // Native HTMLElement lifecycle method which runs on destroy
   disconnectedCallback() {
     this.unmount()
+    this.mutationObserver.disconnect()
   }
 
   private unmount() {
@@ -22,7 +31,17 @@ export class ReactElement extends HTMLElement {
   }
 
   private render() {
+    // Prevent render if digest cycles are pending, ensuring we
+    // don't unnecessarily re-render the component (it's especially
+    // important if the component will fetch data on initialization)
+    if (this.hasPendingDigestCycle()) return
     createRoot(this).render(this.createElement(this.getProps()))
+  }
+
+  private hasPendingDigestCycle() {
+    // If an attribute value starts with `{{` it's an expression
+    // which Angular will evaluate in a subsequent digest cycle
+    return [...this.attributes].some(a => a.value.startsWith('{{'))
   }
 
   // Converts stringified kebab-case HTML attributes to parsed camelCase props
