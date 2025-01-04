@@ -24,6 +24,19 @@ export function PokemonPage({ angularPokemon }: { angularPokemon?: Pokemon }) {
       ) : (
         <p>Waiting for Angular to finish loading...</p>
       )}
+      <p>
+        This button demonstrates how events can be sent from the React app to
+        the Angular one:
+      </p>
+      <button
+        onClick={() => {
+          window.dispatchEvent(
+            new CustomEvent('pokemon-event', { detail: 'reload' }),
+          )
+        }}
+      >
+        Reload
+      </button>
     </div>
   )
 }
