@@ -1,0 +1,11 @@
+.pokemonPage {
+  margin-inline: auto;
+  max-width: 65rem;
+}
+
+.reloadButton {
+  background-color: blue;
+  border-radius: 0.5rem;
+  color: white;
+  padding: 0.5rem;
+}

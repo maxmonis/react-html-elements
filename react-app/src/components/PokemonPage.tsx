@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { InternalLink } from './InternalLink'
+import styles from '../styles/PokemonPage.module.css'
 
 export function PokemonPage({ angularPokemon }: { angularPokemon?: Pokemon }) {
   return (
-    <div>
+    <div className={styles.pokemonPage}>
       <InternalLink text="Return Home" />
       <h1>Pokemon</h1>
       <p>
@@ -29,6 +30,7 @@ export function PokemonPage({ angularPokemon }: { angularPokemon?: Pokemon }) {
         the Angular one:
       </p>
       <button
+        className={styles.reloadButton}
         onClick={() => {
           window.dispatchEvent(
             new CustomEvent('pokemon-event', { detail: 'reload' }),
