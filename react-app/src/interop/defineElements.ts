@@ -12,7 +12,7 @@ export function defineElements() {
       element.tag,
       class extends ReactElement {
         constructor() {
-          super(() => createElement(element))
+          super(props => createElement(element, props))
         }
       },
     )
