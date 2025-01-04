@@ -1,5 +1,5 @@
-export function InternalLink() {
-  return <a href="#!/phones">Return Home</a>
+export function InternalLink({ route = 'phones', text = 'Return Home' }) {
+  return <a href={'#!/' + route}>{text}</a>
 }
 
 InternalLink.tag = 'internal-link'
